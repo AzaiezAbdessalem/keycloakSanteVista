@@ -8,7 +8,7 @@
 		<version>3.2.3</version>
 		<relativePath/>
 	</parent>
-	<groupId>com.resturant</groupId>
+	<groupId>com</groupId>
 	<artifactId>security-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>security-service</name>
