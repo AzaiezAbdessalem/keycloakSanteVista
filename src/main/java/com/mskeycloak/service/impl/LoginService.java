@@ -164,7 +164,7 @@ public class LoginService implements ILoginService {
 
         User user = null;
 
-        if (!loginrequest.getUsername().equals("ons")) {
+        if (!loginrequest.getUsername().equals("hela")) {
             user = userRepository.findByUsername(loginrequest.getUsername())
                     .orElseThrow(() -> new NotAuthorizedException("Utilisateur non trouvé avec le nom d'utilisateur"));
         }

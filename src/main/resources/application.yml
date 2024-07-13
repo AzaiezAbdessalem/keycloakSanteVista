@@ -16,8 +16,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/Restaurant
-          jwk-set-uri: http://localhost:8080/realms/Restaurant/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/realms/SanteVista
+          jwk-set-uri: http://localhost:8080/realms/SanteVista/protocol/openid-connect/certs
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -44,9 +44,9 @@ email:
 
 keycloak:
   server-url: "http://localhost:8080"
-  realm: "Restaurant"
-  client-id: "keycloakRestaurant"
-  client-secret: "FJ49Gy7gInUOz0OIZCPeBXPdZNzrp2Lhg"
-  admin-username: "ons"
-  admin-password: "ons"
+  realm: "SanteVista"
+  client-id: "KeyCloakAuthService"
+  client-secret: "BZnCFrvTHwCtq3Hx71b2zPWZBe8s9EX8"
+  admin-username: "hela"
+  admin-password: "hela"
   lock-duration: 30
