@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="section-title">
+    <h2>Questions Fréquemment Posées</h2></div>
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item" *ngFor="let item of items; let i = index">
+      <h2 class="accordion-header" id="heading{{i}}">
+        <button
+          class="accordion-button"
+          type="button"
+          (click)="toggle(i)"
+          [attr.aria-expanded]="isOpen(i)"
+          [attr.aria-controls]="'collapse' + i"
+        >
+          {{ item.title }}
+          <span class="accordion-icon" [class.rotate]="isOpen(i)">
+            <i class="bi" [ngClass]="{'bi-chevron-down': !isOpen(i), 'bi-chevron-up': isOpen(i)}"></i>
+          </span>
+        </button>
+      </h2>
+      <div
+        [id]="'collapse' + i"
+        class="accordion-collapse collapse"
+        [class.show]="isOpen(i)"
+        [attr.aria-labelledby]="'heading' + i"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body">
+        {{ item.content }}
+      </div>
+    </div>
+  </div>
+  </div>
+
