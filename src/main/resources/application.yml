@@ -25,7 +25,7 @@ spring:
       connection-timeout: 60000
       maximum-pool-size: 30
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/securitykeycloak
+    url: jdbc:postgresql://localhost:5432/SanteVistaSecurityKeycloak
     username: postgres
     password: admin
   jpa:

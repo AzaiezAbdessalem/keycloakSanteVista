@@ -31,6 +31,7 @@ public class LoginController {
     }
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
+        System.out.println(user.getGender());
         final User loginResponse = iUserService.create(user);
         return ResponseEntity.ok(loginResponse);
     }

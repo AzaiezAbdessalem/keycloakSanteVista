@@ -21,7 +21,7 @@ public interface IUserService {
      * @param userId the id of the user to enable or disable.
      * @throws NotFoundException if the user couldn't be found.
      */
-    void toggleUserEnabled(String userId);
+    User toggleUserEnabled(String userId);
 
     /**
      * Create a new user.

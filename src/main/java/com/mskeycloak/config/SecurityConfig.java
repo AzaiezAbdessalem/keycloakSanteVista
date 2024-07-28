@@ -21,6 +21,8 @@ public class SecurityConfig {
     private static final String[] AUTH_WHITELIST = {
             "/api/keycloak/auth/login",
             "/api/keycloak/auth/register",
+            "/api/keycloak/roles/statusFalse",
+
 
 
 

@@ -67,7 +67,7 @@ public class UserService implements IUserService {
      * {@inheritDoc}
      */
     @Override
-    public void toggleUserEnabled(String userId) {
+    public User toggleUserEnabled(String userId) {
         log.debug("SERVICE : toggleUserEnabled : {}", userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User " + userId + " not found"));
@@ -81,6 +81,8 @@ public class UserService implements IUserService {
         userRepository.save(user);
         userRepresentation.setEnabled(!previousStatus);
         keycloak.realm(keycloakConfig.getRealm()).users().get(userId).update(userRepresentation);
+    return user;
+
     }
 
     /**
@@ -94,7 +96,7 @@ public class UserService implements IUserService {
         newUser.setEmail(user.getEmail());
         newUser.setFirstName(user.getFirstname());
         newUser.setLastName(user.getLastname());
-        newUser.setEnabled(true);
+        newUser.setEnabled(false);
         CredentialRepresentation credentials = new CredentialRepresentation();
         credentials.setTemporary(false);
         credentials.setType(CredentialRepresentation.PASSWORD);
@@ -143,6 +145,7 @@ public class UserService implements IUserService {
                 .username(user.getUsername())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
+                .gender(user.getGender())
                 .id(createdUser.getId())
                 .email(user.getEmail())
                 .roles(roles)

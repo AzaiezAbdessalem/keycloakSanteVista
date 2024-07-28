@@ -26,10 +26,14 @@ public class KeyCloakAuthServiceApplication {
     @Bean
     CommandLineRunner start() {
         return args -> {
-            Role admin = new Role();
-            admin.setName("Client");
-            admin.setDescription("Client");
-            saveRole(admin);
+            Role Nutritionist = new Role();
+            Nutritionist.setName("Nutritionist");
+            Nutritionist.setDescription("Nutritionist");
+            saveRole(Nutritionist);
+            Role Patient = new Role();
+            Patient.setName("Patient");
+            Patient.setDescription("Patient");
+            saveRole(Patient);
         };
     }
     private void saveRole(Role role) {

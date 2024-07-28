@@ -51,10 +51,9 @@ public class UserController {
 
 
     @PostMapping(value = "/toggleUserEnabled/{id}")
-    public ResponseEntity<String> toggleUserEnabled(@PathVariable String id) {
-        log.debug("REST request to toggle user enabled : {}", id);
-        userService.toggleUserEnabled(id);
-        return ResponseEntity.ok().body("User enabled status toggled successfully.");
+    public ResponseEntity<User> toggleUserEnabled(@PathVariable String id) {
+        ;
+        return ResponseEntity.ok().body(userService.toggleUserEnabled(id));
     }
 
 

@@ -45,7 +45,7 @@ public class User {
     private boolean enabled = true;
 
     private boolean status = false;
-
+    private String gender;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
