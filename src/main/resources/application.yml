@@ -56,7 +56,7 @@ spring:
 #  server-url: "http://localhost:8080"
 #  realm: "SanteVista"
 #  client-id: "KeyCloakAuthService"
-#  client-secret: "BZnCFrvTHwCtq3Hx71b2zPWZBe8s9EX8"
+#  client-secret: "lRQxtHOa3dPEG7fLFl6c45tLbUT9f3X9"
 #  admin-username: "hela"
 #  admin-password: "hela"
 #  lock-duration: 30

@@ -38,6 +38,13 @@ public class User {
 
 
     private String lastname;
+    private float weight;
+    private float Height;
+    private String job;
+    private String Goal;
+    private int age;
+    private Long idRegime;
+
 
 
     private String password;
