@@ -25,4 +25,17 @@ public class RandomUtils {
         return sb.toString();
     }
 
+    public static String generateRandomCode() {
+        final String characters = "123456789";
+        final StringBuilder sb = new StringBuilder();
+        final SecureRandom random = new SecureRandom();
+        final int length = 8;
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+        return sb.toString();
+    }
+
 }

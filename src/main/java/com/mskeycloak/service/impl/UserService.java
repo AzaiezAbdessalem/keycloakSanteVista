@@ -1,6 +1,7 @@
 package com.mskeycloak.service.impl;
 
 import com.mskeycloak.client.IMailClient;
+import com.mskeycloak.dto.MailDto;
 import com.mskeycloak.error.exception.BadRequestException;
 import com.mskeycloak.error.exception.NotFoundException;
 import com.mskeycloak.model.Role;
@@ -22,9 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Service class for managing {@link User}.
@@ -81,39 +80,63 @@ public class UserService implements IUserService {
         userRepository.save(user);
         userRepresentation.setEnabled(!previousStatus);
         keycloak.realm(keycloakConfig.getRealm()).users().get(userId).update(userRepresentation);
-    return user;
+        if (!previousStatus) {
+            sendActivationEmail(user);
+        }
 
+        return user;
     }
 
+    private void sendActivationEmail(User user) {
+        System.out.println(user.isEnabled());
+        MailDto mail=new MailDto();
+        String subject = "Votre compte a été activé";
+        String message = "";
+        mail.setSubject(subject);
+        mail.setMailTo(user.getEmail());
+        mailClient.activatedAccount(mail);
+    }
     /**
      * {@inheritDoc}
      */
     @Override
     public User create(User user) {
         log.info("SERVICE : createUser : {}", user);
+
+        // Créer la représentation de l'utilisateur
         UserRepresentation newUser = new UserRepresentation();
         newUser.setUsername(user.getUsername());
         newUser.setEmail(user.getEmail());
         newUser.setFirstName(user.getFirstname());
         newUser.setLastName(user.getLastname());
         newUser.setEnabled(false);
+
+        // Ajouter les credentials (mot de passe)
         CredentialRepresentation credentials = new CredentialRepresentation();
         credentials.setTemporary(false);
         credentials.setType(CredentialRepresentation.PASSWORD);
         credentials.setValue(user.getPassword());
         newUser.setCredentials(List.of(credentials));
 
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        // Vérifier si l'email existe déjà
+        if (userRepository.findByEmailIgnoreCase(user.getEmail()).isPresent()) {
             throw new BadRequestException("Email déjà existant");
         }
 
-        Response response = keycloak.realm(keycloakConfig.getRealm()).users().create(newUser);
+        // Ajouter l'attribut firstLogin
+        Map<String, List<String>> attributes = new HashMap<>();
+        attributes.put("firstLogin", Collections.singletonList("true"));
+        newUser.setAttributes(attributes);
 
+        // Créer l'utilisateur dans Keycloak
+        Response response = keycloak.realm(keycloakConfig.getRealm()).users().create(newUser);
         log.info("SERVICE : createUser : {}", response.getStatus());
 
         if (response.getStatus() != 201) {
             throw new BadRequestException("Erreur lors de la création de l'utilisateur");
         }
+
+        // Récupérer l'ID de l'utilisateur créé
         String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
         UserRepresentation createdUser = keycloak
                 .realm(keycloakConfig.getRealm())
@@ -121,17 +144,16 @@ public class UserService implements IUserService {
                 .get(userId)
                 .toRepresentation();
 
+        // Assigner les rôles à l'utilisateur
         Collection<Role> roles = user.getRoles();
-        // Assign the desired role to the user
         if (!roles.isEmpty()) {
-
             for (Role r : roles) {
                 RoleRepresentation roleRepresentation = keycloak
                         .realm(keycloakConfig.getRealm())
                         .roles()
                         .get(r.getName())
                         .toRepresentation();
-                log.info("SERVICE : roleRepresentation : {}" , roleRepresentation);
+                log.info("SERVICE : roleRepresentation : {}", roleRepresentation);
                 keycloak.realm(keycloakConfig.getRealm()).users()
                         .get(userId)
                         .roles()
@@ -140,7 +162,7 @@ public class UserService implements IUserService {
             }
         }
 
-
+        // Créer l'utilisateur dans la base de données locale
         User userToCreateInLocalDb = User.builder()
                 .username(user.getUsername())
                 .firstname(user.getFirstname())
@@ -150,10 +172,11 @@ public class UserService implements IUserService {
                 .email(user.getEmail())
                 .roles(roles)
                 .build();
-        userToCreateInLocalDb=userRepository.save(userToCreateInLocalDb);
+        userToCreateInLocalDb = userRepository.save(userToCreateInLocalDb);
 
         return userToCreateInLocalDb;
     }
+
 
     /**
      * {@inheritDoc}
@@ -162,7 +185,7 @@ public class UserService implements IUserService {
     @Transactional(readOnly = true)
     public User findByUsername(String username) {
         log.debug("SERVICE : getUser : {}", username);
-        return userRepository.findByUsername(username)
+        return userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 

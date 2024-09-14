@@ -3,6 +3,7 @@ package com.mskeycloak.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -45,7 +46,14 @@ public class User {
     private boolean enabled = true;
 
     private boolean status = false;
+
     private String gender;
+
+    private String VERIF_CODE;
+
+    private String VERIF_CODE_DATE;
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -54,6 +62,10 @@ public class User {
     )
     private Collection<Role> roles = new ArrayList<>();
 
+    private Integer failedLoginAttempts;
 
+    private Boolean accountLocked;
+    private LocalDateTime lockTime;
+    private LocalDateTime unlockTime;
 
 }

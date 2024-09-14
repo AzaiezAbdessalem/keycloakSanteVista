@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@FeignClient(value = "email-service")
+@FeignClient(name = "mail-service", url = "http://localhost:8086")
 
 public interface IMailClient {
 
-    @PostMapping("/api/mail/creationAccount")
-    ResponseEntity<Void> sendAddEmail(@RequestBody MailDto mailDto);
+    @PostMapping("/api/mail/activatedAccount")
+    ResponseEntity<Void> activatedAccount(@RequestBody MailDto mailDto);
 
     @PostMapping("/api/mail/resetPassword")
     ResponseEntity<Void> sendResetEmail(@RequestBody MailDto mailDto);
